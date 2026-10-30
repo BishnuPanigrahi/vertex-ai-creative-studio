@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Poised – Sign in</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <nav class="top">
+    <div class="container">
+      <a class="brand" href="/">Poised<span>.</span></a>
+      <div class="links"><a href="/">Home</a></div>
+    </div>
+  </nav>
+  <main class="container auth-wrap">
+    <div class="card stack auth-card">
+      <h1 id="title">Create your account</h1>
+      <p class="hint" id="subtitle">Free to start. No card needed.</p>
+      <form id="form" class="stack">
+        <div><label for="email">Email</label><input id="email" type="email" autocomplete="email" required /></div>
+        <div><label for="password">Password</label><input id="password" type="password" autocomplete="new-password" minlength="8" required /></div>
+        <button class="btn primary" type="submit" id="submit" style="width: 100%">Create account</button>
+      </form>
+      <div class="error" id="err"></div>
+      <p class="hint" style="text-align: center"><span id="switchText">Already have an account?</span> <a href="#" id="switch">Sign in</a></p>
+    </div>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    let mode = params.get("mode") === "login" ? "login" : "signup";
+    const $ = (id) => document.getElementById(id);
+    function render() {
+      const login = mode === "login";
+      $("title").textContent = login ? "Welcome back" : "Create your account";
+      $("subtitle").textContent = login ? "Sign in to keep practicing." : "Free to start. No card needed.";
+      $("submit").textContent = login ? "Sign in" : "Create account";
+      $("switchText").textContent = login ? "New here?" : "Already have an account?";
+      $("switch").textContent = login ? "Create an account" : "Sign in";
+      $("password").autocomplete = login ? "current-password" : "new-password";
+      $("err").textContent = "";
+    }
+    $("switch").addEventListener("click", (e) => { e.preventDefault(); mode = mode === "login" ? "signup" : "login"; render(); });
+    $("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      $("submit").disabled = true;
+      try {
+        const res = await fetch(`/api/auth/${mode}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: $("email").value, password: $("password").value }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.detail || "Something went wrong.");
+        location.href = "/app.html" + (params.get("plan") === "pro" ? "?upgrade=1" : "");
+      } catch (err) {
+        $("err").textContent = err.message;
+      } finally {
+        $("submit").disabled = false;
+      }
+    });
+    fetch("/api/me").then((r) => { if (r.ok) location.href = "/app.html"; });
+    render();
+  </script>
+</body>
+</html>
