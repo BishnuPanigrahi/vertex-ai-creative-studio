@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Poised – Practice</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <nav class="top">
+    <div class="container">
+      <a class="brand" href="/">Poised<span>.</span></a>
+      <div class="links"><a href="/">Home</a></div>
+    </div>
+  </nav>
+
+  <main class="app container">
+    <div class="card stack" style="margin-bottom: 24px">
+      <div class="row">
+        <div><label for="role">Target role</label><input id="role" value="Software Engineer" /></div>
+        <div><label for="level">Level</label>
+          <select id="level"><option>entry</option><option selected>mid</option><option>senior</option><option>staff</option><option>manager</option></select></div>
+        <div><label for="type">Interview type</label>
+          <select id="type"><option>behavioral</option><option>technical</option><option>system design</option><option>product sense</option><option>case</option></select></div>
+      </div>
+      <div class="row">
+        <div><label for="resume">Resume (optional, paste text)</label><textarea id="resume" placeholder="Paste your resume..."></textarea></div>
+        <div><label for="jd">Job description (optional)</label><textarea id="jd" placeholder="Paste the job post..."></textarea></div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="btn active" data-tab="mock">Mock interview</button>
+      <button class="btn" data-tab="coach">Practice coach</button>
+      <button class="btn" data-tab="match">Resume match</button>
+    </div>
+
+    <!-- Mock interview -->
+    <section class="panel active card stack" id="mock" style="padding: 24px">
+      <div class="actions"><button class="btn primary" id="nextQ">Get a question</button></div>
+      <div id="qBox" hidden>
+        <div class="question" id="qText"></div>
+        <div class="hint" id="qTests"></div>
+      </div>
+      <div id="answerBox" hidden class="stack">
+        <label for="answer">Your answer</label>
+        <textarea id="answer" placeholder="Type, or press the mic to speak..."></textarea>
+        <div class="actions">
+          <button class="btn" id="micAnswer">🎙️ Speak answer</button>
+          <button class="btn primary" id="submitAnswer">Get feedback</button>
+        </div>
+      </div>
+      <div id="fbBox" hidden class="stack">
+        <div class="score" id="fbScore"></div>
+        <div><strong>Strengths</strong><ul id="fbStrengths"></ul></div>
+        <div><strong>Improve</strong><ul id="fbImprove"></ul></div>
+        <div><strong>Stronger answer</strong><p id="fbBetter" style="white-space: pre-wrap"></p></div>
+      </div>
+      <div class="error" id="mockErr"></div>
+    </section>
+
+    <!-- Practice coach -->
+    <section class="panel card stack" id="coach" style="padding: 24px">
+      <p class="hint">Have a friend (or a recording) play the interviewer. The coach listens and suggests talking points for the latest question so you can practise structuring answers.</p>
+      <div class="actions">
+        <button class="btn primary" id="coachStart">Start listening</button>
+        <button class="btn" id="coachStop" disabled>Stop</button>
+        <button class="btn" id="coachSuggest">Suggest talking points</button>
+      </div>
+      <div><label>Transcript</label><div class="card transcript" id="coachTranscript"></div></div>
+      <div id="coachOut" hidden><div class="question" id="coachQ"></div><ul id="coachPoints"></ul></div>
+      <div class="error" id="coachErr"></div>
+    </section>
+
+    <!-- Resume match -->
+    <section class="panel card stack" id="match" style="padding: 24px">
+      <p class="hint">Uses the job description above. Upload a PDF/TXT resume, or leave empty to use the pasted resume text.</p>
+      <input type="file" id="resumeFile" accept=".pdf,.txt,.md" />
+      <div class="actions"><button class="btn primary" id="runMatch">Analyze match</button></div>
+      <div id="matchOut" hidden class="stack">
+        <div class="score" id="mScore"></div>
+        <div><strong>Matched skills</strong><div id="mMatched"></div></div>
+        <div><strong>Missing skills</strong><div id="mMissing"></div></div>
+        <div><strong>Suggested bullets</strong><ul id="mBullets"></ul></div>
+        <div><strong>Cover letter</strong><p id="mLetter" style="white-space: pre-wrap"></p></div>
+      </div>
+      <div class="error" id="matchErr"></div>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
