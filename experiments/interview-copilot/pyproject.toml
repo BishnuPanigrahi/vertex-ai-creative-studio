@@ -1,0 +1,17 @@
+[project]
+name = "poised-interview-coach"
+version = "0.2.0"
+description = "AI interview practice coach backed by Gemini on Vertex AI"
+requires-python = ">=3.11"
+
+[tool.ruff]
+extend = "../../pyproject.toml"
+
+[tool.ruff.lint.isort]
+known-first-party = ["ai", "auth", "billing", "db", "server"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "PLR2004", "ANN", "D103", "ARG001"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

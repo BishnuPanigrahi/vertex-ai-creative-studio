@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Poised – Practice</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <nav class="top">
+    <div class="container">
+      <a class="brand" href="/">Poised<span>.</span></a>
+      <div class="links">
+        <span class="usage" id="usage"></span>
+        <span class="badge" id="planBadge">free</span>
+        <button class="btn small primary" id="upgradeBtn" hidden>Upgrade</button>
+        <div class="menu" id="menu">
+          <button class="btn small" id="menuBtn" aria-haspopup="true">Account ▾</button>
+          <div class="menu-list">
+            <div class="hint" id="menuEmail"></div>
+            <button class="btn small" id="billingBtn" hidden>Manage billing</button>
+            <button class="btn small" id="devFreeBtn" hidden>Switch to Free (dev)</button>
+            <button class="btn small" id="logoutBtn">Sign out</button>
+            <button class="btn small danger" id="deleteBtn">Delete account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="app container">
+    <div class="banner" id="upgradedBanner" hidden><span>🎉 You're on Pro. Practice is now unlimited.</span><button class="btn small" onclick="this.parentElement.hidden = true">Dismiss</button></div>
+
+    <div class="card stack" style="margin-bottom: 24px">
+      <div class="row">
+        <div><label for="role">Target role</label><input id="role" value="Software Engineer" /></div>
+        <div><label for="level">Level</label>
+          <select id="level"><option>entry</option><option selected>mid</option><option>senior</option><option>staff</option><option>manager</option></select></div>
+        <div><label for="type">Interview type</label>
+          <select id="type"><option>behavioral</option><option>technical</option><option>system design</option><option>product sense</option><option>case</option></select></div>
+      </div>
+      <div class="row">
+        <div><label for="resume">Resume (paste text)</label><textarea id="resume" placeholder="Paste your resume..."></textarea></div>
+        <div><label for="jd">Job description</label><textarea id="jd" placeholder="Paste the job post..."></textarea></div>
+      </div>
+      <div class="actions"><button class="btn small" id="saveProfile">Save as my defaults</button><span class="hint" id="profileMsg"></span></div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="btn active" data-tab="mock">Mock interview</button>
+      <button class="btn" data-tab="coding">Coding interview</button>
+      <button class="btn" data-tab="coach">Practice coach</button>
+      <button class="btn" data-tab="resume-tab">Resume &amp; cover letter</button>
+      <button class="btn" data-tab="progress">Progress</button>
+    </div>
+
+    <!-- Mock interview -->
+    <section class="panel active card stack" id="mock">
+      <div class="actions">
+        <button class="btn primary" id="nextQ">Get a question</button>
+        <label class="check"><input type="checkbox" id="voiceMode" /> Voice mode (question read aloud, mic starts automatically)</label>
+      </div>
+      <div id="qBox" hidden>
+        <div class="hint" id="qLabel">Question</div>
+        <div class="question" id="qText"></div>
+        <div class="hint" id="qTests"></div>
+      </div>
+      <div id="answerBox" hidden class="stack">
+        <label for="answer">Your answer</label>
+        <textarea id="answer" placeholder="Type, or press the mic to speak..."></textarea>
+        <div class="actions">
+          <button class="btn" id="micAnswer">🎙️ Speak answer</button>
+          <button class="btn primary" id="submitAnswer">Get feedback</button>
+          <span class="hint" id="answerTimer"></span>
+        </div>
+      </div>
+      <div id="fbBox" hidden class="stack">
+        <div class="score" id="fbScore"></div>
+        <div><strong>Strengths</strong><ul id="fbStrengths"></ul></div>
+        <div><strong>Improve</strong><ul id="fbImprove"></ul></div>
+        <div><strong>Stronger answer</strong><p id="fbBetter" style="white-space: pre-wrap"></p></div>
+        <div class="card" style="background: var(--surface-2)">
+          <div class="hint">Likely follow-up</div>
+          <div id="fbFollow" style="font-weight: 600"></div>
+          <div class="actions" style="margin-top: 12px"><button class="btn small primary" id="answerFollow">Answer the follow-up</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coding interview -->
+    <section class="panel card stack" id="coding">
+      <div class="row">
+        <div><label for="lang">Language</label>
+          <select id="lang"><option>Python</option><option>JavaScript</option><option>TypeScript</option><option>Java</option><option>C++</option><option>Go</option><option>C#</option></select></div>
+        <div><label for="difficulty">Difficulty</label>
+          <select id="difficulty"><option>easy</option><option selected>medium</option><option>hard</option></select></div>
+        <div><label for="topic">Topic (optional)</label><input id="topic" placeholder="e.g. graphs, sliding window, DP" /></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="getProblem">New problem</button>
+        <span class="timer" id="codeTimer"></span>
+      </div>
+      <div id="problemBox" hidden class="stack">
+        <div class="question" id="pTitle"></div>
+        <p id="pStatement" style="white-space: pre-wrap; margin: 0"></p>
+        <div><strong>Examples</strong><pre class="code-out" id="pExamples"></pre></div>
+        <div><strong>Constraints</strong><ul id="pConstraints"></ul></div>
+        <div><label for="editor">Your solution</label><textarea id="editor" class="code" spellcheck="false"></textarea></div>
+        <div class="actions">
+          <button class="btn" id="hintBtn">💡 Hint</button>
+          <button class="btn primary" id="reviewBtn">Submit for review</button>
+        </div>
+        <ol id="hints" class="hint"></ol>
+      </div>
+      <div id="reviewBox" hidden class="stack">
+        <div class="score" id="rScore"></div>
+        <div><strong>Correctness</strong><p id="rCorrect" style="margin: 0"></p></div>
+        <div class="row">
+          <div><strong>Time</strong><p id="rTime" style="margin: 0"></p></div>
+          <div><strong>Space</strong><p id="rSpace" style="margin: 0"></p></div>
+        </div>
+        <div><strong>Issues</strong><ul id="rIssues"></ul></div>
+        <div><strong>Improved solution</strong><pre class="code-out" id="rCode"></pre></div>
+      </div>
+    </section>
+
+    <!-- Practice coach -->
+    <section class="panel card stack" id="coach">
+      <p class="hint">Have a friend (or a recording) play the interviewer. The coach listens, and when it hears a question it suggests talking points so you can practise structuring answers.</p>
+      <div class="actions">
+        <button class="btn primary" id="coachStart">Start listening</button>
+        <button class="btn" id="coachStop" disabled>Stop</button>
+        <button class="btn" id="coachSuggest">Suggest talking points</button>
+        <button class="btn ghost" id="coachClear">Clear</button>
+      </div>
+      <div><label>Transcript</label><div class="card transcript" id="coachTranscript"></div></div>
+      <div id="coachOut" hidden><div class="question" id="coachQ"></div><ul id="coachPoints"></ul></div>
+    </section>
+
+    <!-- Resume -->
+    <section class="panel card stack" id="resume-tab">
+      <p class="hint">Uses the job description above. Upload a PDF/TXT resume, or leave empty to use the pasted resume text.</p>
+      <input type="file" id="resumeFile" accept=".pdf,.txt,.md" />
+      <div class="actions">
+        <button class="btn primary" id="runMatch">Analyze match</button>
+        <button class="btn" id="runTailor">Build tailored resume</button>
+      </div>
+      <div id="matchOut" hidden class="stack">
+        <div class="score" id="mScore"></div>
+        <div><strong>Matched skills</strong><div id="mMatched"></div></div>
+        <div><strong>Missing skills</strong><div id="mMissing"></div></div>
+        <div><strong>Suggested bullets</strong><ul id="mBullets"></ul></div>
+        <div>
+          <strong>Cover letter</strong>
+          <p id="mLetter" style="white-space: pre-wrap"></p>
+          <div class="actions"><button class="btn small" id="copyLetter">Copy</button><button class="btn small" id="dlLetter">Download .txt</button></div>
+        </div>
+      </div>
+      <div id="tailorOut" hidden class="stack">
+        <strong>Tailored resume (Markdown)</strong>
+        <pre class="code-out" id="tResume" style="white-space: pre-wrap"></pre>
+        <div class="actions"><button class="btn small" id="copyResume">Copy</button><button class="btn small" id="dlResume">Download .md</button></div>
+      </div>
+    </section>
+
+    <!-- Progress -->
+    <section class="panel stack" id="progress">
+      <div class="grid" id="stats"></div>
+      <div class="card stack">
+        <div class="actions" style="justify-content: space-between">
+          <select id="histFilter" style="width: auto">
+            <option value="">All practice</option><option value="mock">Mock interviews</option><option value="coding">Coding</option><option value="match">Resume matches</option>
+          </select>
+          <button class="btn small" id="exportBtn">Download report</button>
+        </div>
+        <div id="historyList"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"><span id="toastMsg"></span><button class="btn small primary" id="toastUpgrade" hidden>Upgrade</button><button class="btn small ghost" id="toastClose">✕</button></div>
+  <script src="/app.js"></script>
+</body>
+</html>
